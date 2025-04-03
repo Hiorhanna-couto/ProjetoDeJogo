@@ -12,19 +12,48 @@ namespace ProjetoDejogos.Repositories
         {
             _context = context;
         }
-        public void Atualizar(Guid ID, Usuario usuarios)
+        public void Atualizar(Guid id, Usuarios usuarios)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                Usuarios usuarioBuscado = _context.Usuarios.Find(id)!;
+
+                if (usuarioBuscado != null)
+                {
+                    usuarioBuscado.NomeUsuario = usuarios.NomeUsuario;
+                    usuarioBuscado.NickName = usuarios.NickName;
+                }
+
+                _context.Usuarios.Update(usuarioBuscado!);
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public void Cadastrar(Usuario usuarios)
+        public Usuarios BuscarPorId(Guid id)
         {
             try
             {
-                usuarios.UsuarioID = Guid.NewGuid();
-                _context.Usuario.Add);
-                _context.SaveChanges();
+                return _context.Usuarios.Find(id)!;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
+        public void Cadastrar(Usuarios usuarios)
+        {
+            try
+            {
+                usuarios.UsuarioId = Guid.NewGuid();
+                _context.Usuarios.Add(usuarios);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -33,14 +62,40 @@ namespace ProjetoDejogos.Repositories
             }
         }
 
-        public void Deletar(Guid ID)
+        public void Deletar(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Usuarios usuarioBuscado = _context.Usuarios.Find(id)!;
+
+                if (usuarioBuscado != null)
+                {
+                    _context.Usuarios.Remove(usuarioBuscado);
+                }
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public List<Usuario> Listar()
+        public List<Usuarios> Listar()
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                return _context.Usuarios.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
+
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ProjetoDejogos.Contexts;
 using ProjetoDejogos.Domains;
 using ProjetoDejogos.Interfaces;
+using ProjetoDejogos.Migrations;
 
 namespace ProjetoDejogos.Repositories
 {
@@ -12,61 +13,83 @@ namespace ProjetoDejogos.Repositories
         {
             _context = context;
         }
-        public void Atualizar(Guid id, Jogo jogoAtualizado)
+        public void Atualizar(Guid id, Jogo jogos)
         {
             try
             {
+                Jogo jogoBuscado = _context.Jogo.Find(id)!;
 
-            }
-            catch (Exception)
-            {
+                if (jogoBuscado != null)
+                {
+                    jogoBuscado.Jogo = jogos.NomeJogo;
+                }
 
-                throw;
-            }
-        }
-
-        public void Cadastrar(Jogo jogoNovo)
-        {
-            try
-            {
-                jogoNovo.JogoID = Guid.NewGuid();
-                _context.Jogo.Add(jogoNovo);
+                _context.Jogo.Update(jogoBuscado!);
 
                 _context.SaveChanges();
-
-            }
-            catch (Exception )  
-            {
-                throw;
-            }
-
-        }
-
-        public void Deletar(Guid idDoJogo)
-        {
-            try
-            {
-
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
 
+        public Jogo BuscarPorId(Guid id)
+        {
+            try
+            {
+                return _context.Jogo.Find(id)!;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void Cadastrar(Jogo jogos)
+        {
+            try
+            {
+                jogos.JogoID = Guid.NewGuid();
+                _context.Jogo.Add(jogos);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void Deletar(Guid id)
+        {
+            try
+            {
+                Jogo jogoBuscado = _context.Jogo.Find(id)!;
+
+                if (jogoBuscado != null)
+                {
+                    _context.Jogo.Remove(jogoBuscado);
+                }
+
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
 
         public List<Jogo> Listar()
         {
+
             try
             {
-                List<Jogo> ListarJogo = _context.Jogo.ToList();
-
+                return _context.Jogo.ToList();
             }
-            catch (Exception) 
+            catch (Exception)
             {
-            
+                throw;
             }
-
         }
     }
 }
